@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Stress & Performance Predictor Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>📊 Student Stress & Academic Performance Predictor</h1>
+        <p>Group G-10 | BE CSE AI&ML | Batch 2024</p>
+    </div>
+
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('overview')">Dataset Overview</button>
+            <button class="tab-button" onclick="showTab('models')">Model Comparison</button>
+            <button class="tab-button" onclick="showTab('clusters')">Cluster Explorer</button>
+            <button class="tab-button" onclick="showTab('predictor')">Live Predictor</button>
+        </div>
+
+        <!-- Tab 1: Dataset Overview -->
+        <div id="overview" class="tab-content active">
+            <h2>Dataset Overview</h2>
+            <p><strong>Status:</strong> Awaiting data collection (Sprint 1)</p>
+            <p>This tab will show once we have collected ≥50 survey responses.</p>
+            <div class="placeholder">
+                <p>Charts will include:</p>
+                <ul>
+                    <li>Class distribution (At Risk vs Performing)</li>
+                    <li>Feature distributions</li>
+                    <li>Correlation heatmap</li>
+                    <li>Response count</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tab 2: Model Comparison -->
+        <div id="models" class="tab-content">
+            <h2>Model Comparison</h2>
+            <p><strong>Status:</strong> Models in training (Sprint 3-4)</p>
+            <p>4 Classifiers will be compared:</p>
+            <table class="models-table">
+                <thead>
+                    <tr>
+                        <th>Model</th>
+                        <th>Accuracy</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>F1-Score</th>
+                        <th>ROC-AUC</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Logistic Regression</td>
+                        <td colspan="5">Pending...</td>
+                    </tr>
+                    <tr>
+                        <td>Decision Tree</td>
+                        <td colspan="5">Pending...</td>
+                    </tr>
+                    <tr>
+                        <td>Random Forest</td>
+                        <td colspan="5">Pending...</td>
+                    </tr>
+                    <tr>
+                        <td>SVM</td>
+                        <td colspan="5">Pending...</td>
+                    </tr>
+                </tbody>
+            </table>
+            <canvas id="metricsChart" width="400" height="200" style="display: none;"></canvas>
+        </div>
+
+        <!-- Tab 3: Cluster Explorer -->
+        <div id="clusters" class="tab-content">
+            <h2>Cluster Explorer</h2>
+            <p><strong>Status:</strong> K-Means clustering (Sprint 4)</p>
+            <p>Expected 3 lifestyle archetypes:</p>
+            <div class="clusters-grid">
+                <div class="cluster-card">
+                    <h3>🎯 Balanced Achiever</h3>
+                    <p><strong>Sleep:</strong> 7–8 hrs</p>
+                    <p><strong>Stress:</strong> 3–5/10</p>
+                    <p><strong>Activity:</strong> Regular</p>
+                    <p><em>Mostly Performing</em></p>
+                </div>
+                <div class="cluster-card">
+                    <h3>⚡ Sleep-Deprived Grinder</h3>
+                    <p><strong>Sleep:</strong> 4–5 hrs</p>
+                    <p><strong>Stress:</strong> 6–8/10</p>
+                    <p><strong>Study:</strong> High</p>
+                    <p><em>Mixed performance</em></p>
+                </div>
+                <div class="cluster-card">
+                    <h3>🔥 Overloaded & Burned Out</h3>
+                    <p><strong>Sleep:</strong> &lt;5 hrs</p>
+                    <p><strong>Stress:</strong> 8–10/10</p>
+                    <p><strong>Activity:</strong> Low</p>
+                    <p><em>Mostly At Risk</em></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 4: Live Predictor -->
+        <div id="predictor" class="tab-content">
+            <h2>Live Predictor</h2>
+            <p><strong>Status:</strong> Model training required</p>
+            <form id="predictorForm" class="predictor-form">
+                <div class="form-section">
+                    <h3>Academic Metrics</h3>
+                    <div class="form-group">
+                        <label>Attendance %: <span id="attendanceValue">50</span>%</label>
+                        <input type="range" name="attendance_pct" min="0" max="100" value="50" step="1" oninput="updateValue('attendanceValue', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Daily Study Hours:</label>
+                        <select name="study_hours">
+                            <option value="1">&lt;2 hours</option>
+                            <option value="2">2–4 hours</option>
+                            <option value="3">4–6 hours</option>
+                            <option value="4">&gt;6 hours</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Sleep & Wellness</h3>
+                    <div class="form-group">
+                        <label>Sleep Hours/Night: <span id="sleepValue">7</span> hrs</label>
+                        <input type="range" name="sleep_hrs" min="4" max="12" value="7" step="0.5" oninput="updateValue('sleepValue', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Screen Time (hrs): <span id="screenValue">5</span> hrs</label>
+                        <input type="range" name="screen_time" min="0" max="18" value="5" step="0.5" oninput="updateValue('screenValue', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Physical Activity Days/Week: <span id="activityValue">3</span> days</label>
+                        <input type="range" name="activity_days" min="0" max="7" value="3" step="1" oninput="updateValue('activityValue', this.value)">
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Lifestyle & Social</h3>
+                    <div class="form-group">
+                        <label>Extracurricular Activities:</label>
+                        <select name="extracurricular">
+                            <option value="0">None</option>
+                            <option value="1">1 activity</option>
+                            <option value="2">2 activities</option>
+                            <option value="3">3+ activities</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" name="part_time_work" value="1"> Part-time work/Freelancing
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Accommodation:</label>
+                        <select name="accommodation">
+                            <option value="0">Day Scholar</option>
+                            <option value="1">Hostel</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone after Midnight:</label>
+                        <select name="phone_midnight">
+                            <option value="0">Rarely</option>
+                            <option value="1">Sometimes</option>
+                            <option value="2">Often</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Stress & Well-being</h3>
+                    <div class="form-group">
+                        <label>Academic Stress Level: <span id="stressValue">5</span>/10</label>
+                        <input type="range" name="stress_level" min="1" max="10" value="5" step="1" oninput="updateValue('stressValue', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Overwhelmed by Workload:</label>
+                        <select name="overwhelmed">
+                            <option value="0">Never</option>
+                            <option value="1">Sometimes</option>
+                            <option value="2">Often</option>
+                            <option value="3">Always</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Social Support Rating: <span id="supportValue">4</span>/5</label>
+                        <input type="range" name="social_support" min="1" max="5" value="4" step="1" oninput="updateValue('supportValue', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Skips Meals Due to Workload:</label>
+                        <select name="skips_meals">
+                            <option value="0">Never</option>
+                            <option value="1">Rarely</option>
+                            <option value="2">Often</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Life Satisfaction: <span id="lifeSatValue">7</span>/10</label>
+                        <input type="range" name="life_satisfaction" min="1" max="10" value="7" step="1" oninput="updateValue('lifeSatValue', this.value)">
+                    </div>
+                </div>
+
+                <button type="submit" class="predict-button">🎯 Get Prediction</button>
+            </form>
+
+            <div id="predictionResult" class="prediction-result" style="display: none;">
+                <h3>📈 Prediction Result</h3>
+                <div class="result-card" id="resultCard"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Student Stress & Academic Performance Predictor | Group G-10 | Chitkara University</p>
+        <p>API Status: <span id="apiStatus">Connecting...</span></p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
