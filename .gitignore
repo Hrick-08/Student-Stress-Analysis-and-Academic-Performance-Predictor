@@ -39,10 +39,10 @@ wheels/
 .DS_Store
 
 # Data & Models
-data/raw/*.csv
-data/processed/*.csv
-models/*.pkl
-*.pkl
+# data/raw/*.csv
+# data/processed/*.csv
+# models/*.pkl
+# *.pkl
 
 # Dashboard artifacts
 frontend/node_modules/
