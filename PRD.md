@@ -12,7 +12,7 @@ Student Stress & Performance Predictor  |  PRD v1.0  |  24CAI0203
 
 |**Course:**|24CAI0203 — SUL|
 | :- | :- |
-|**Team:**|Hritabrata Das (Lead) · Hashit · Abhinav Dadwal|
+|**Team:**|Hritabrata Das (Lead) · Harshit · Abhinav Dadwal|
 |**Group:**|G-10  |  BE CSE AI&ML  |  4th Sem  |  Batch 2024|
 |**Eval 1:**|23–27 March 2026|
 |**Final Eval:**|27 April – 1 May 2026|
@@ -249,7 +249,7 @@ Train and compare 4 classifiers on identical train/test splits. GridSearchCV wit
 |Sprint 2 Eval 1 Prep|Mar 21–22|<p>Complete 01\_EDA.ipynb: heatmap, distributions, class balance</p><p>Prepare 3-slide eval deck: problem, dataset, ML approach</p><p>Do a dry run — all 3 members practise verbal explanation</p>|Hritabrata leads|
 |EVAL 1|Mar 23–27|<p>Present: problem understanding, dataset attributes, feasibility, ML approach</p><p>Target: full 2/2 marks</p>|All members|
 |Sprint 3 Supervised ML|Mar 28–Apr 7|<p>02\_preprocessing.ipynb: full pipeline with SMOTE</p><p>03\_supervised.ipynb: train all 4 classifiers with GridSearchCV</p><p>Generate confusion matrices, ROC curves, feature importance plot</p><p>Fill in metrics comparison table</p>|Hritabrata + Abhinav|
-|Sprint 4 Unsupervised|Apr 8–13|<p>04\_unsupervised.ipynb: PCA + elbow method + K-Means</p><p>Generate 2D cluster scatter plot</p><p>Name clusters, compute cluster stats</p><p>05\_comparison.ipynb: full comparison summary</p>|Hashit + Hritabrata|
+|Sprint 4 Unsupervised|Apr 8–13|<p>04\_unsupervised.ipynb: PCA + elbow method + K-Means</p><p>Generate 2D cluster scatter plot</p><p>Name clusters, compute cluster stats</p><p>05\_comparison.ipynb: full comparison summary</p>|Harshit + Hritabrata|
 |Sprint 5 API + Dashboard|Apr 14–20|<p>Build FastAPI: all 5 endpoints + schemas + predictor.py</p><p>Save model artifacts (scaler.pkl, random\_forest.pkl, kmeans.pkl, pca.pkl)</p><p>Build frontend: 4 tabs, Chart.js visualisations, live predictor form</p><p>End-to-end test: form submit → API → result rendered</p>|Hritabrata|
 |Sprint 6 Report + Viva|Apr 21–26|<p>Write full project report (all 6 sections per notice)</p><p>Prepare architecture diagram (draw.io or Python matplotlib)</p><p>Full viva mock: each member answers 6 questions cold</p><p>Final dashboard polish + demo script</p>|All members|
 |FINAL EVAL|Apr 27–May 1|<p>Live dashboard demo</p><p>Project report submitted</p><p>Viva — all 3 members answer independently</p><p>Target: full 8/8 remaining marks</p>|All members|
@@ -260,7 +260,7 @@ Train and compare 4 classifiers on identical train/test splits. GridSearchCV wit
 |**Member**|**Primary Role**|**Key Deliverables**|
 | :- | :- | :- |
 |**Hritabrata Das (Group Leader)**|ML Lead + Backend|<p>Sprint planning and GitHub repo management</p><p>Supervised ML notebook (03\_supervised.ipynb)</p><p>FastAPI backend (all endpoints)</p><p>Final dashboard integration</p><p>Project report compilation</p>|
-|**Hashit**|Data + Unsupervised|<p>Google Form distribution and response collection</p><p>Preprocessing pipeline (02\_preprocessing.ipynb)</p><p>K-Means + PCA notebook (04\_unsupervised.ipynb)</p><p>Cluster interpretation and naming</p><p>EDA visualisations</p>|
+|**Harshit**|Data + Unsupervised|<p>Google Form distribution and response collection</p><p>Preprocessing pipeline (02\_preprocessing.ipynb)</p><p>K-Means + PCA notebook (04\_unsupervised.ipynb)</p><p>Cluster interpretation and naming</p><p>EDA visualisations</p>|
 |**Abhinav Dadwal**|Analysis + Report|<p>EDA notebook (01\_EDA.ipynb)</p><p>Comparison notebook (05\_comparison.ipynb)</p><p>Metrics table and results write-up</p><p>Architecture diagram</p><p>Viva preparation slides</p>|
 
 |<p>**All 3 members must be able to explain every algorithm and every result independently.**</p><p>Viva is 5/10 marks. You lose marks if one member cannot answer — the examiner will ask individuals.</p>|
@@ -291,4 +291,4 @@ Per the project notice (Ref CUIET/CSE/i-AI/2026/016), the report must include al
 |<p>**You're ready to start. First action: send the Google Form link to your batch today.**</p><p>Everything else in this PRD follows once you have data.</p>|
 | :- |
 
-Page   |  Hritabrata Das · Hashit · Abhinav Dadwal  |  Group G-10
+Page   |  Hritabrata Das · Harshit · Abhinav Dadwal  |  Group G-10

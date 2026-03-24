@@ -13,7 +13,7 @@ This project builds a two-track ML system:
 
 ### Team
 - **Hritabrata Das** (Lead) — ML + Backend
-- **Hashit** — Data + Unsupervised Learning
+- **Harshit** — Data + Unsupervised Learning
 - **Abhinav Dadwal** — Analysis + Report
 
 ## Project Structure
