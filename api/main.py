@@ -3,119 +3,112 @@ FastAPI Backend for Student Stress & Academic Performance Predictor
 
 Serves REST API endpoints for:
 - Health check
-- Performance predictions
-- Model metrics
-- Cluster information
-- Feature importance
+- Model comparison
+- Single model prediction
+- All models prediction
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from contextlib import asynccontextmanager
-import joblib
-from pathlib import Path
+from schemas import StudentInput, PredictionResult, AllModelsResult, ModelsListResponse
+from predictor import predict_single_model, predict_all_models, MODELS_INFO
 
-# Import schemas and predictor logic
-from schemas import StudentInput, PredictionResult, MetricsResponse, ClustersResponse, FeatureImportanceResponse
-from predictor import predict_performance
+# Initialize FastAPI app
+app = FastAPI()
 
-# Load models on startup
-models_dir = Path(__file__).parent.parent / "models"
-scaler = None
-model = None
-kmeans = None
-pca = None
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Load models on startup, clean up on shutdown."""
-    global scaler, model, kmeans, pca
-    
-    print("Loading models...")
-    scaler = joblib.load(models_dir / "scaler.pkl")
-    model = joblib.load(models_dir / "random_forest.pkl")
-    kmeans = joblib.load(models_dir / "kmeans.pkl")
-    pca = joblib.load(models_dir / "pca.pkl")
-    print("✅ Models loaded successfully")
-    
-    yield
-    
-    print("Cleaning up...")
-
-# Initialize FastAPI app with CORS
-app = FastAPI(
-    title="Student Stress Predictor API",
-    description="Predicts academic performance risk based on lifestyle habits",
-    version="1.0.0",
-    lifespan=lifespan
-)
-
-# Enable CORS for frontend
+# Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Allow all origins (frontend on different port)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 @app.get("/health")
-async def health_check():
+def health_check():
     """Health check endpoint."""
     return {
         "status": "ok",
-        "model": "random_forest",
-        "models_available": ["random_forest", "logistic_regression", "decision_tree", "svm"]
+        "message": "Student Stress Predictor API is running",
+        "models_available": list(MODELS_INFO.keys()),
+        "task": "regression"
     }
 
-@app.post("/predict", response_model=PredictionResult)
-async def predict(student_input: StudentInput):
+@app.post("/predict")
+def predict_endpoint(
+    student_input: StudentInput,
+    model_name: str = "AdaBoost"
+) -> PredictionResult:
     """
-    Predict performance category for a student.
+    Predict academic performance using specified model.
     
-    Returns:
-    - label: 0 = At Risk, 1 = Performing
-    - confidence: Probability of predicted class
-    - cluster_id: K-Means cluster assignment
-    - cluster_name: Lifestyle archetype name
+    Query Parameters:
+    - model_name (str): One of "AdaBoost", "GradientBoosting", "Ridge", "LinearRegression", "Lasso"
+                        Defaults to "AdaBoost" (best model)
     """
-    result = predict_performance(student_input, scaler, model, kmeans, pca)
-    return result
+    if model_name not in MODELS_INFO:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Model '{model_name}' not available. Choose from: {list(MODELS_INFO.keys())}"
+        )
+    
+    try:
+        result = predict_single_model(student_input, model_name)
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Prediction error: {str(e)}"
+        )
 
-@app.get("/metrics", response_model=MetricsResponse)
-async def get_metrics():
-    """Return model evaluation metrics (to be populated from training notebooks)."""
-    # Placeholder - will be populated after training
-    return {
-        "random_forest": {
-            "accuracy": 0.0,
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1_score": 0.0,
-            "roc_auc": 0.0
+@app.post("/predict-all")
+def predict_all_endpoint(student_input: StudentInput) -> AllModelsResult:
+    """
+    Predict using all available models and return comparison.
+    """
+    try:
+        predictions = predict_all_models(student_input)
+        
+        return AllModelsResult(
+            input_summary={
+                "stress_level": student_input.stress_level,
+                "anxiety_level": student_input.anxiety_level,
+                "sleep_quality": student_input.sleep_quality,
+                "self_esteem": student_input.self_esteem,
+                "social_support": student_input.social_support,
+            },
+            predictions=predictions,
+            selected_model="AdaBoost"  # Best model
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Prediction error: {str(e)}"
+        )
+
+@app.get("/models")
+def list_models() -> ModelsListResponse:
+    """
+    List all available models with their performance metrics.
+    """
+    models = [
+        {
+            "name": name,
+            "test_r2": info["r2"],
+            "rmse": info["rmse"]
         }
-    }
+        for name, info in MODELS_INFO.items()
+    ]
+    return ModelsListResponse(models=models)
 
-@app.get("/clusters", response_model=ClustersResponse)
-async def get_clusters():
-    """Return K-Means cluster information."""
-    # Placeholder - will be populated from training
-    return {
-        "clusters": [
-            {
-                "id": 0,
-                "name": "Balanced Achiever",
-                "description": "Good sleep, low stress, regular activity",
-                "centroid": []
-            }
-        ]
-    }
-
-@app.get("/feature-importance", response_model=FeatureImportanceResponse)
-async def get_feature_importance():
-    """Return Random Forest feature importance."""
-    # Placeholder - will be populated from training
-    return {"features": []}
+@app.get("/metrics")
+def get_metrics():
+    """
+    Return model performance metrics.
+    """
+    return MODELS_INFO
 
 if __name__ == "__main__":
     import uvicorn
