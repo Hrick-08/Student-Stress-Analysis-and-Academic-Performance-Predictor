@@ -29,20 +29,8 @@ student-stress-predictor/
 │       ├── StressLevelDataset_cleaned.csv
 │       └── after_eda.csv
 ├── notebooks/
-│   ├── EDA6_improved.ipynb           # Full pipeline: cleaning, EDA, modelling, export
-│   ├── EDA6_final.ipynb              # (legacy notebooks)
-│   └── ... (other versions)
+│   ├── main.ipynb           # Full pipeline: cleaning, EDA, modelling, export
 ├── models/                           # Saved trained models (.joblib files)
-│   ├── AdaBoost.joblib               # Best model
-│   ├── AdaBoost__scaler.joblib
-│   ├── AdaBoost__features.joblib
-│   ├── GradientBoosting.joblib
-│   ├── Ridge.joblib
-│   ├── Ridge__scaler.joblib
-│   ├── LinearRegression.joblib
-│   ├── Lasso.joblib
-│   ├── Lasso__scaler.joblib
-│   ├── ElasticNet.joblib
 │   └── ... (model files for each)
 ├── api/                              # FastAPI backend
 │   ├── main.py                       # API endpoints & CORS setup
@@ -52,7 +40,7 @@ student-stress-predictor/
 ├── ui/                         # Dashboard UI (vanilla JS)
 │   ├── index.html                    # Main dashboard
 │   ├── app.js                        # Tabs, forms, charts, API calls
-│   └── style.css                     # Responsive styling
+│   └── style.css                     # Basic styling
 ├── requirements.txt                  # Python dependencies
 ├── README.md                         # (this file)
 └── .gitignore
