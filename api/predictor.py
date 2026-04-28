@@ -19,11 +19,12 @@ MODELS_INFO = {
     "GradientBoosting": {"r2": 0.6724, "rmse": 0.8258},
     "Ridge": {"r2": 0.6519, "rmse": 0.8512},
     "LinearRegression": {"r2": 0.6519, "rmse": 0.8512},
+    "ElasticNet": {"r2": 0.6357, "rmse": 0.8708},
     "Lasso": {"r2": 0.6517, "rmse": 0.8514},
 }
 
 # Models that require scaling
-LINEAR_MODELS = {"Ridge", "Lasso", "LinearRegression"}
+LINEAR_MODELS = {"Ridge", "Lasso", "LinearRegression", "ElasticNet"}
 
 # Cache for loaded models
 _models_cache = {}

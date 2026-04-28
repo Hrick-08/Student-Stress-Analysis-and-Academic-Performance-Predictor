@@ -121,7 +121,7 @@ function initializeCharts() {
                     data: r2Values,
                     backgroundColor: [
                         "#2ecc71", // Green for best
-                        "#3498db", "#3498db", "#3498db", "#e74c3c"
+                        "#3498db", "#3498db", "#3498db", "#3498db", "#e74c3c"
                     ],
                     borderColor: "#2c3e50",
                     borderWidth: 2
@@ -163,7 +163,7 @@ function initializeCharts() {
                     data: rmseValues,
                     backgroundColor: [
                         "#2ecc71",
-                        "#3498db", "#3498db", "#3498db", "#e74c3c"
+                        "#3498db", "#3498db", "#3498db", "#3498db", "#e74c3c"
                     ],
                     borderColor: "#2c3e50",
                     borderWidth: 2

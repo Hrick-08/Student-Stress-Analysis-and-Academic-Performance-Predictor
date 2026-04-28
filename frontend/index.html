@@ -23,7 +23,7 @@
         <!-- Tab 1: Model Comparison -->
         <div id="models" class="tab-content active">
             <h2>Model Performance Comparison</h2>
-            <p>Performance metrics for all 5 trained regression models on test data:</p>
+            <p>Performance metrics for all 6 trained regression models on test data:</p>
             
             <div class="metrics-container">
                 <div class="chart-wrapper">
@@ -59,7 +59,8 @@
 
             <div class="note-box">
                 <strong>Note:</strong> The <strong>AdaBoost</strong> model is recommended as the primary model (best R² = 0.6958).
-                However, you can use any model in the Live Predictor tab.
+                ElasticNet combines L1 and L2 regularization and offers a middle ground between Lasso and Ridge.
+                You can use any model in the Live Predictor tab.
             </div>
         </div>
 
@@ -81,6 +82,7 @@
                             <option value="Ridge">Ridge (R² = 0.6519)</option>
                             <option value="LinearRegression">LinearRegression (R² = 0.6519)</option>
                             <option value="Lasso">Lasso (R² = 0.6517)</option>
+                            <option value="ElasticNet">ElasticNet (R² = 0.6357)</option>
                         </select>
                         <span class="model-note" id="modelNote">Using AdaBoost (best model)</span>
                     </div>

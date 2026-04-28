@@ -45,7 +45,7 @@ def predict_endpoint(
     Predict academic performance using specified model.
     
     Query Parameters:
-    - model_name (str): One of "AdaBoost", "GradientBoosting", "Ridge", "LinearRegression", "Lasso"
+    - model_name (str): One of "AdaBoost", "GradientBoosting", "Ridge", "LinearRegression", "Lasso", "ElasticNet"
                         Defaults to "AdaBoost" (best model)
     """
     if model_name not in MODELS_INFO:
