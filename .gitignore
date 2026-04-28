@@ -62,3 +62,5 @@ htmlcov/
 # Project specific
 survey_raw.csv
 *.xlsx
+
+frontend/

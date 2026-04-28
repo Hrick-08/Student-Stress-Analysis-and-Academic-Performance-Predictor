@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Stress & Performance Predictor Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>📊 Student Stress & Academic Performance Predictor</h1>
+        <p>Group G-10 | BE CSE AI&ML | Batch 2024</p>
+    </div>
+
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('models')">Model Comparison</button>
+            <button class="tab-button" onclick="showTab('predictor')">Live Predictor</button>
+        </div>
+
+        <!-- Tab 1: Model Comparison -->
+        <div id="models" class="tab-content active">
+            <h2>Model Performance Comparison</h2>
+            <p>Performance metrics for all 6 trained regression models on test data:</p>
+            
+            <div class="metrics-container">
+                <div class="chart-wrapper">
+                    <h3>Test R² Score (Higher is Better)</h3>
+                    <div class="chart-container">
+                        <canvas id="r2Chart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-wrapper">
+                    <h3>Root Mean Square Error (Lower is Better)</h3>
+                    <div class="chart-container">
+                        <canvas id="rmseChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="metrics-table-container">
+                <h3>Detailed Metrics</h3>
+                <table class="metrics-table">
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Test R²</th>
+                            <th>RMSE</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="metricsTableBody">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="note-box">
+                <strong>Note:</strong> The <strong>AdaBoost</strong> model is recommended as the primary model (best R² = 0.6958).
+                ElasticNet combines L1 and L2 regularization and offers a middle ground between Lasso and Ridge.
+                You can use any model in the Live Predictor tab.
+            </div>
+        </div>
+
+        <!-- Tab 2: Live Predictor -->
+        <div id="predictor" class="tab-content">
+            <h2>Live Prediction</h2>
+            <p>Fill in the student's information below and select a model to predict academic performance:</p>
+
+            <div class="predictor-layout">
+                <!-- Input Form -->
+                <div class="input-section">
+                    <h3>Student Information</h3>
+                    
+                    <div class="form-group">
+                        <label>Model Selection:</label>
+                        <select id="modelSelect" onchange="updateSelectedModel()">
+                            <option value="AdaBoost">AdaBoost (Recommended - R² = 0.6958)</option>
+                            <option value="GradientBoosting">GradientBoosting (R² = 0.6724)</option>
+                            <option value="Ridge">Ridge (R² = 0.6519)</option>
+                            <option value="LinearRegression">LinearRegression (R² = 0.6519)</option>
+                            <option value="Lasso">Lasso (R² = 0.6517)</option>
+                            <option value="ElasticNet">ElasticNet (R² = 0.6357)</option>
+                        </select>
+                        <span class="model-note" id="modelNote">Using AdaBoost (best model)</span>
+                    </div>
+
+                    <fieldset>
+                        <legend>Environmental & Social Factors</legend>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Safety (0-5):</label>
+                                <input type="range" id="safety" min="0" max="5" value="3" oninput="updateValue('safety')">
+                                <span class="value-display" id="safety-val">3</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Basic Needs (0-5):</label>
+                                <input type="range" id="basic_needs" min="0" max="5" value="3" oninput="updateValue('basic_needs')">
+                                <span class="value-display" id="basic_needs-val">3</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Living Conditions (0-5):</label>
+                                <input type="range" id="living_conditions" min="0" max="5" value="3" oninput="updateValue('living_conditions')">
+                                <span class="value-display" id="living_conditions-val">3</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Social Support (0-5):</label>
+                                <input type="range" id="social_support" min="0" max="5" value="3" oninput="updateValue('social_support')">
+                                <span class="value-display" id="social_support-val">3</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Teacher-Student Relationship (0-5):</label>
+                                <input type="range" id="teacher_student_relationship" min="0" max="5" value="3" oninput="updateValue('teacher_student_relationship')">
+                                <span class="value-display" id="teacher_student_relationship-val">3</span>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Mental Health & Stress</legend>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Anxiety Level (0-21):</label>
+                                <input type="range" id="anxiety_level" min="0" max="21" value="10" oninput="updateValue('anxiety_level')">
+                                <span class="value-display" id="anxiety_level-val">10</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Depression (0-27):</label>
+                                <input type="range" id="depression" min="0" max="27" value="13" oninput="updateValue('depression')">
+                                <span class="value-display" id="depression-val">13</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Self Esteem (0-30):</label>
+                                <input type="range" id="self_esteem" min="0" max="30" value="15" oninput="updateValue('self_esteem')">
+                                <span class="value-display" id="self_esteem-val">15</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Mental Health History:</label>
+                                <select id="mental_health_history">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Physical Health</legend>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Headache Frequency (0-5):</label>
+                                <input type="range" id="headache" min="0" max="5" value="2" oninput="updateValue('headache')">
+                                <span class="value-display" id="headache-val">2</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Blood Pressure:</label>
+                                <select id="blood_pressure">
+                                    <option value="1">Low</option>
+                                    <option value="2" selected>Normal</option>
+                                    <option value="3">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Sleep Quality:</label>
+                                <select id="sleep_quality">
+                                    <option value="0">Poor</option>
+                                    <option value="1">Average</option>
+                                    <option value="2" selected>Good</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Breathing Problems (0-5):</label>
+                                <input type="range" id="breathing_problem" min="0" max="5" value="0" oninput="updateValue('breathing_problem')">
+                                <span class="value-display" id="breathing_problem-val">0</span>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Academic & Lifestyle</legend>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Stress Level:</label>
+                                <select id="stress_level">
+                                    <option value="0">Low</option>
+                                    <option value="1" selected>Medium</option>
+                                    <option value="2">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Extracurricular Activities (0-5):</label>
+                                <input type="range" id="extracurricular_activities" min="0" max="5" value="2" oninput="updateValue('extracurricular_activities')">
+                                <span class="value-display" id="extracurricular_activities-val">2</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Peer Pressure (0-5):</label>
+                                <input type="range" id="peer_pressure" min="0" max="5" value="2" oninput="updateValue('peer_pressure')">
+                                <span class="value-display" id="peer_pressure-val">2</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Study Load (0-5):</label>
+                                <input type="range" id="study_load" min="0" max="5" value="3" oninput="updateValue('study_load')">
+                                <span class="value-display" id="study_load-val">3</span>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Future Career Concerns (0-5):</label>
+                                <input type="range" id="future_career_concerns" min="0" max="5" value="3" oninput="updateValue('future_career_concerns')">
+                                <span class="value-display" id="future_career_concerns-val">3</span>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <button class="predict-btn" onclick="runPrediction()">Predict Performance</button>
+                </div>
+
+                <!-- Results Section -->
+                <div class="result-section">
+                    <h3>Prediction Result</h3>
+                    <div id="resultContainer" class="result-placeholder">
+                        <p>Click "Predict Performance" to see results</p>
+                    </div>
+
+                    <!-- All Models Comparison (when needed) -->
+                    <div id="allModelsContainer" style="display: none;">
+                        <h3 style="margin-top: 30px;">All Models Predictions (Sorted by Risk Level)</h3>
+                        <table class="all-models-table">
+                            <thead>
+                                <tr>
+                                    <th>Model</th>
+                                    <th>Score %</th>
+                                    <th>Status</th>
+                                    <th>Raw Prediction</th>
+                                    <th>R²</th>
+                                </tr>
+                            </thead>
+                            <tbody id="allModelsBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
