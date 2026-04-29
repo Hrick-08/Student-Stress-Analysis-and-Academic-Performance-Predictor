@@ -3,7 +3,13 @@
  * Handles tab navigation, model comparison, and live prediction
  */
 
+// const API_BASE = "https://student-stress-analysis-and-academic.onrender.com";
 const API_BASE = "http://localhost:8001";
+
+// Safely joins API_BASE + path, preventing double slashes
+function apiUrl(path) {
+    return `${API_BASE.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
+}
 let chartsInitialized = false;
 let metricsData = {};
 let selectedModel = "AdaBoost";
@@ -41,7 +47,7 @@ function showTab(tabName) {
 async function loadMetrics() {
     try {
         console.log("📥 Loading model metrics from API...");
-        const response = await fetch(`${API_BASE}/models`);
+        const response = await fetch(apiUrl("models"));
         const data = await response.json();
         console.log("✅ Metrics loaded:", data.models);
 
@@ -245,12 +251,12 @@ async function runPrediction() {
     };
 
     console.log("📤 Sending prediction request with payload:", payload);
-    console.log(`🔗 API Endpoint: ${API_BASE}/predict?model_name=${selectedModel}`);
+    console.log(`🔗 API Endpoint: ${apiUrl(`predict?model_name=${selectedModel}`)}`)
 
     try {
         // Get prediction from selected model
         const response = await fetch(
-            `${API_BASE}/predict?model_name=${selectedModel}`,
+            apiUrl(`predict?model_name=${selectedModel}`),
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -331,7 +337,7 @@ async function getAllModelsPredictions(payload) {
     try {
         console.log("🌟 Requesting all models predictions...");
         const response = await fetch(
-            `${API_BASE}/predict-all`,
+            apiUrl("predict-all"),
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -475,4 +481,3 @@ function displayError(message) {
         </div>
     `;
 }
-
