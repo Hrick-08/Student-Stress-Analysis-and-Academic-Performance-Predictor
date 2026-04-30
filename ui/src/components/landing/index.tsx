@@ -1,0 +1,6 @@
+export { Navbar } from "./navbar"
+export { HeroSection } from "./hero"
+export { StatsSection } from "./stats"
+export { FeaturesSection } from "./features"
+export { TeamSection } from "./team"
+export { Footer } from "./footer"
